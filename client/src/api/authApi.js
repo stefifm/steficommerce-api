@@ -9,4 +9,4 @@ export const login = async (user) =>
   await axios.post(`${API}/login`, user);
 
 export const profile = async () =>
-  await axios.post(`${API}/profile`);
+  await axios.get(`${API}/profile`);
