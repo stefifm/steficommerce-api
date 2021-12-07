@@ -1,6 +1,7 @@
 import express from 'express'
 import './config/mongoose'
 import productRoutes from './routes/products.routes'
+import authRoutes from './routes/auth.routes'
 import cors from 'cors'
 import  { PORT }   from './config'
 
@@ -11,6 +12,7 @@ app.use(express.json())
 
 
 app.use(productRoutes)
+app.use(authRoutes)
 
 
 app.listen(PORT)
