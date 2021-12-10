@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useProducts } from "../../context/providers/ProductsContext";
+import Spinner from '../../components/ui/Spinner'
 
 const Productform = () => {
   const { addNewProduct, isLoading } = useProducts();
@@ -32,11 +33,7 @@ const Productform = () => {
               >
                 {isLoading ? (
                   <>
-                    <span
-                      className="spinner-border spinner-border-sm"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
+                  <Spinner/>
                     <span className="ms-2">Loading....</span>
                   </>
                 ) : (
@@ -84,7 +81,7 @@ const Productform = () => {
             <div className="col-md-4 my-auto">
               <img
                 src="/assets/noimage2.png"
-                alt="No Image PNG"
+                alt="No PNG"
                 className="img-fluid"
               />
             </div>

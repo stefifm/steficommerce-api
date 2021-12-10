@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from 'react-router-dom'
 
 const Hero = () => {
   return (
@@ -10,12 +11,12 @@ const Hero = () => {
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, ipsa fugiat tempora distinctio sint hic possimus corrupti aliquid dignissimos doloremque expedita rerum ea eos consectetur quam, nulla quae. Rem, est.
           </p>
           <p>
-            <a href="#" className="btn btn-primary my-2">
+            <Link to="/" className="btn btn-primary my-2">
               Main call to action
-            </a>
-            <a href="#" className="btn btn-secondary my-2">
+            </Link>
+            <Link to="/" className="btn btn-secondary my-2">
               Secondary action
-            </a>
+            </Link>
           </p>
         </div>
       </div>
