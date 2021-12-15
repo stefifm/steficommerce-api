@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/providers/AuthContext";
 import Spinner from "../../components/ui/Spinner";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -10,28 +11,39 @@ const Register = () => {
 
   const { regis, isLoading, errorMessage } = useAuth();
 
+  const navigate = useNavigate();
+
   const handleChange = (e) =>
     setUser({ ...user, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await regis({ email: user.email, password: user.password });
+    try {
+      const userRes = await regis({
+        email: user.email,
+        password: user.password,
+      });
+      if (userRes) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div className="row h-100">
       <div className="col-md-4 offset-md-4 p-2 my-auto">
+        {errorMessage && (
+          <div
+            className="alert alert-danger text-center rounded-0"
+            role="alert"
+          >
+            {errorMessage}
+          </div>
+        )}
 
-        {
-          errorMessage && (
-          <>
-          
-          <h1>{errorMessage}</h1>
-          
-          </>)
-        }
-
-        <div className="card card-body">
+        <div className="card card-body p-2">
           <h1>Register</h1>
 
           <form onSubmit={handleSubmit}>
@@ -71,6 +83,9 @@ const Register = () => {
                 <span>Register</span>
               )}
             </button>
+            <p className="mt-4">
+              Do yo have an Account? <Link to="/auth/login">Login</Link>
+            </p>
           </form>
         </div>
       </div>

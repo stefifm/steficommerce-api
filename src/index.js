@@ -4,6 +4,7 @@ import productRoutes from './routes/products.routes'
 import authRoutes from './routes/auth.routes'
 import cors from 'cors'
 import morgan from 'morgan'
+import fileupload from 'express-fileupload'
 import  { PORT }   from './config'
 
 const app = express()
@@ -11,6 +12,11 @@ const app = express()
 app.use(cors())
 app.use(morgan("dev"))
 app.use(express.json())
+app.use(express.urlencoded({extended: false}))
+app.use(fileupload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/"
+}))
 
 
 app.use(productRoutes)
@@ -18,12 +24,12 @@ app.use(authRoutes)
 
 
 app.use((err,req, res, next) => {
-    const error = {
+
+    res.status(err.status || 500)
+    res.send({
         status: err.status || 500,
         message: err.message,
-
-    }
-    res.json(error)
+    })
 })
 
 app.listen(PORT)

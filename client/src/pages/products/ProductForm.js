@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useProducts } from "../../context/providers/ProductsContext";
-import Spinner from '../../components/ui/Spinner'
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import Spinner from "../../components/ui/Spinner";
 
 const Productform = () => {
   const { addNewProduct, isLoading } = useProducts();
@@ -12,12 +14,28 @@ const Productform = () => {
     description: "",
   });
 
+  const [selectedImage, setselectedImage] = useState(null);
+
+  const navigate = useNavigate();
+
   const handleChange = (e) =>
     setProduct({ ...product, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await addNewProduct(product);
+    
+
+    const formData = new FormData();
+    formData.append("name", product.name);
+    formData.append("price", product.price);
+    formData.append("quantity", product.quantity);
+    formData.append("description", product.description);
+    formData.append("image", selectedImage)
+
+    await addNewProduct(formData);
+
+    navigate("/");
+    toast.success("🚀 New Product added!");
   };
 
   return (
@@ -33,7 +51,7 @@ const Productform = () => {
               >
                 {isLoading ? (
                   <>
-                  <Spinner/>
+                    <Spinner />
                     <span className="ms-2">Loading....</span>
                   </>
                 ) : (
@@ -77,10 +95,25 @@ const Productform = () => {
                 className="form-control"
                 onChange={handleChange}
               ></textarea>
+              <label htmlFor="image">Image:</label>
+              <input
+                type="file"
+                name="image"
+                id="image"
+                className="form-control"
+                onChange={(e) => {
+                  setselectedImage(e.target.files[0]);
+                }}
+              />
             </div>
+
             <div className="col-md-4 my-auto">
               <img
-                src="/assets/noimage2.png"
+                src={
+                  selectedImage
+                    ? URL.createObjectURL(selectedImage)
+                    : "/assets/noimage2.png"
+                }
                 alt="No PNG"
                 className="img-fluid"
               />

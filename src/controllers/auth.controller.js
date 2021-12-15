@@ -14,19 +14,19 @@ export const login = async (req, res, next) => {
         /* Match password */
       
         const userFound = await User.findOne({ email: user.email });
-        if (!userFound) return next(createError.Unauthorized("User not found"))
+        if (!userFound) throw createError.Unauthorized("User not found")
        
       
         const isMatch = await userFound.validPassword(user.password);
       
-        if (!isMatch) return next(createError.Unauthorized("Invalid password"))
+        if (!isMatch) throw createError.Unauthorized("Invalid password")
 
         const token = await signAccessToken(userFound.id)
 
         res.json({token})
 
     } catch (error) {
-        if (error.isJoi) return next(createError.BadRequest(error.message))
+        if (error.isJoi) error.status = 400 
         next(error)
     }
 };
@@ -39,22 +39,16 @@ export const register = async (req, res, next) => {
     user.password = await user.generateHash(user.password);
 
     const userFound = await User.findOne({ email: user.email });
-    if (userFound) {
-      res.statusMessage = "User already exists";
-      return res.status(400).json({ message: "User already exists" });
-    }
+    if (userFound) throw createError.Conflict("User already exists");
 
     const newUser = await user.save();
 
-    jwt.sign({ id: newUser._id }, SECRET, (err, token) => {
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        res.json({token: token});
-      }
-    });
+    const token = await signAccessToken(newUser.id)
+
+    res.json({token})
+
   } catch (error) {
-    if (error.isJoi) return next(createError.NotFound());
+    if (error.isJoi) error.status = 400;
     next(error);
   }
 };
