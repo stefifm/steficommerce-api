@@ -10,7 +10,7 @@ const Productform = () => {
   const [product, setProduct] = useState({
     name: "",
     price: 0,
-    quantity: 0,
+    stock: 0,
     description: "",
   });
 
@@ -28,7 +28,7 @@ const Productform = () => {
     const formData = new FormData();
     formData.append("name", product.name);
     formData.append("price", product.price);
-    formData.append("quantity", product.quantity);
+    formData.append("stock", product.stock);
     formData.append("description", product.description);
     formData.append("image", selectedImage)
 
@@ -80,11 +80,11 @@ const Productform = () => {
                 onChange={handleChange}
               />
 
-              <label htmlFor="quantity">Quantity:</label>
+              <label htmlFor="stock">Stock:</label>
               <input
                 type="text"
                 className="form-control mb-2"
-                name="quantity"
+                name="stock"
                 onChange={handleChange}
               />
 

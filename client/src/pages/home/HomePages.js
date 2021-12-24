@@ -3,6 +3,7 @@ import { useProducts } from "../../context/providers/ProductsContext";
 import Hero from "../../components/Hero";
 import ProductCard from '../../components/products/ProductCard'
 
+
 const HomePage = () => {
   const { isLoading, products } = useProducts();
   if (isLoading) {
